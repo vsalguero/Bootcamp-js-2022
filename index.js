@@ -67,7 +67,7 @@ function onSubmit(event) {
     precio +
     "</td>" +
     categoria +
-    "</td><td><a href='#' onClick='onEdit(event)'>Editar</a> | <a href='#' onClick='onDelete(event)'>Eliminar</a></td>";
+    "</td><td><div class='btn-group'><a href='#' class='btn btn-small btn-outline-secondary' onClick='onEdit(event)'><i class='bi bi-pencil-square'></i></a> <a href = '#' onClick = 'onDelete(event)' class='btn btn-small btn-outline-danger' > <i class='bi bi-trash'></i></i></a ></div ></td > ";
 
   cantidadTotalElement.innerText = cantidadTotal;
   precioTotalElement.innerText = precioTotal;
@@ -81,8 +81,8 @@ function onSubmit(event) {
 function onEdit(event) {
   event.preventDefault();
   /** @type {HTMLElement} */
-  const anchor = event.target;
-  const tr = anchor.parentElement.parentElement;
+  const anchor = event.currentTarget;
+  const tr = anchor.parentElement.parentElement.parentElement;
   const celdas = tr.getElementsByTagName("td");
   const [tdCodigo, tdNombre, tdCantidad, tdPrecio] = celdas;
 
