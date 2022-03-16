@@ -3,12 +3,14 @@ const inputCodigo = document.getElementById("codigo");
 const inputNombre = document.getElementById("nombre");
 const inputCantidad = document.getElementById("cantidad");
 const inputPrecio = document.getElementById("precio");
-const inputCategoria = document.getElementById("categoria");
+const selectCategoria = document.getElementById("categoria");
 
 const tbody = document.getElementsByTagName("tbody")[0];
 const cantidadTotalElement = document.getElementById("cantidad-total");
 const precioTotalElement = document.getElementById("precio-total");
 const granTotalElement = document.getElementById("gran-total");
+
+form.addEventListener("submit", onSubmit);
 
 const preloadedState = {
     producto: {},
@@ -55,8 +57,13 @@ const reducer = (state, action) => {
             ...state,
             productos
         }
-
-
+    }
+    if (action.type == "producto-seleccionado") {
+        const codigo = action.payload.codigo;
+        return {
+            ...state,
+            producto: state.productos.find(x => x.codigo == codigo) || {}
+        }
     }
     return state;
 };
@@ -70,9 +77,21 @@ const unsuscribe = store.subscribe(() => {
     if (currentState != latestState) {
         latestState = currentState;
         console.log(currentState.productos);
+        renderForm(currentState.producto);
         renderTable(currentState.productos);
     }
 });
+
+
+//function para mostrar producto seleccionado
+
+function renderForm(producto) {
+    inputCodigo.value = producto.codigo;
+    inputNombre.value = producto.nombre || "";
+    inputCantidad.value = producto.cantidad || "";
+    inputPrecio.value = producto.precio || "";
+    selectCategoria.value = producto.categoria || 1;
+}
 
 //function para crear nuevas filas en la tabla
 function renderTable(productos) {
@@ -105,6 +124,16 @@ function renderTable(productos) {
                 }
             })
         });
+
+        editar.addEventListener("click", (event) => {
+            event.preventDefault();
+            store.dispatch({
+                type: "producto-seleccionado",
+                payload: {
+                    codigo: item.codigo
+                }
+            });
+        });
         return tr;
     });
 
@@ -130,7 +159,53 @@ function renderTable(productos) {
 
 }
 
+//submit function
+function onSubmit(event) {
+    event.preventDefault();
 
+    const data = new FormData(form);
+
+    const values = Array.from(data.entries());
+
+    const [frmCodigo, frmNombre, frmCantidad, frmPrecio, frmCategoria] = values;
+
+    const codigo = parseInt(frmCodigo[1]);
+    const nombre = frmNombre[1];
+    const cantidad = parseFloat(frmCantidad[1]);
+    const precio = parseFloat(frmPrecio[1]);
+    const categoria = parseInt(frmCategoria[1]);
+
+    if (codigo) {
+        store.dispatch({
+            type: "producto-modificado",
+            payload: {
+                codigo,
+                nombre,
+                cantidad,
+                precio,
+                categoria
+            }
+        });
+    } else {
+        store.dispatch({
+            type: "producto-agregado",
+            payload: {
+                nombre,
+                cantidad,
+                precio,
+                categoria
+            }
+        });
+    }
+
+    store.dispatch({
+        type: "producto-seleccionado",
+        payload: {
+            codigo: null
+        }
+    });
+
+}
 
 store.dispatch({
     type: "producto-agregado",
