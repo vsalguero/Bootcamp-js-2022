@@ -4,7 +4,6 @@ const inputNombre = document.getElementById("nombre");
 const inputCantidad = document.getElementById("cantidad");
 const inputPrecio = document.getElementById("precio");
 const selectCategoria = document.getElementById("categoria");
-
 const tbody = document.getElementsByTagName("tbody")[0];
 const cantidadTotalElement = document.getElementById("cantidad-total");
 const precioTotalElement = document.getElementById("precio-total");
