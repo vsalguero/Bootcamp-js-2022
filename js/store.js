@@ -1,4 +1,4 @@
-let indice = 0;
+let indice = 1;
 
 const reducer = (state, action) => {
     if (action.type == "producto-agregado") {
@@ -18,6 +18,7 @@ const reducer = (state, action) => {
         }
     }
     if (action.type == "producto-modificado") {
+
         const producto = action.payload;
         const productos = state.productos.slice();
         const codigo = producto.codigo;
@@ -49,3 +50,24 @@ const reducer = (state, action) => {
     }
     return state;
 };
+
+const productoSeleccionado = (codigo) => ({
+    type: "producto-seleccionado",
+    payload: { codigo }
+});
+
+
+const productoEliminado = (codigo) => ({
+    type: "producto-eliminado",
+    payload: { codigo }
+});
+
+const productoModificado = (payload) => ({
+    type: "producto-modificado",
+    payload
+});
+
+const productoAgregado = (payload) => ({
+    type: "producto-agregado",
+    payload
+});

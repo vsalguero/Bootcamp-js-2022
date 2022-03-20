@@ -111,3 +111,4 @@ function renderTable(productos) {
     }
 
 }
+
