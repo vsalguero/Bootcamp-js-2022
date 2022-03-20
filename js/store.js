@@ -1,3 +1,4 @@
+//inicializa la variable
 let indice = 1;
 
 const reducer = (state, action) => {
@@ -71,3 +72,22 @@ const productoAgregado = (payload) => ({
     type: "producto-agregado",
     payload
 });
+
+/*function loggerMidleware(store) {
+    return function dispatchWrapper(next) {
+        return function actionHandler(action) {
+            next(action);
+            const state = store.getState();
+            console.log("dispatching", action);
+            console.log("state", state);
+        }
+    }
+}*/
+
+//using arrow function 
+const loggerMidleware = store => next => action => {
+    console.log("dispatching", action);
+    const result = next(action);
+    console.log("Next state", store.getState());
+    return result;
+}

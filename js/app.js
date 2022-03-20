@@ -4,7 +4,8 @@ const preloadedState = {
 };
 
 
-const store = Redux.createStore(reducer, preloadedState);
+const middlewares = Redux.applyMiddleware(loggerMidleware);
+const store = Redux.createStore(reducer, preloadedState, middlewares);
 
 let latestState;
 
