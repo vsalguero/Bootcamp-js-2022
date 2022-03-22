@@ -73,6 +73,11 @@ const productoAgregado = (payload) => ({
     payload
 });
 
+const agregarOModificarProducto = (payload) => ({
+    type: "producto-agregado-o-modificado",
+    payload:
+})
+
 /*function loggerMidleware(store) {
     return function dispatchWrapper(next) {
         return function actionHandler(action) {
@@ -90,4 +95,18 @@ const loggerMidleware = store => next => action => {
     const result = next(action);
     console.log("Next state", store.getState());
     return result;
+}
+
+const agregarOModificarProductoMidleware = store => next => action => {
+    if (action.type != "producto-agregado-o-modificado") {
+        return next(action);
+    }
+    if (producto.codigo) {
+        store.dispatch(productoModificado(producto));
+    } else {
+        store.dispatch(productoAgregado(producto));
+    }
+
+    return store.dispatch(productoSeleccionado(null));
+
 }
