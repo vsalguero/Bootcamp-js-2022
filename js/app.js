@@ -7,6 +7,7 @@ const preloadedState = {
 const middlewares = Redux.applyMiddleware(
     loggerMidleware,
     agregarOModificarProductoMidleware,
+    generadorCodigoProductoBuilder(0),
 );
 const store = Redux.createStore(reducer, preloadedState, middlewares);
 

@@ -1,9 +1,6 @@
 //inicializa la variable
-let indice = 1;
-
 const reducer = (state, action) => {
     if (action.type == "producto-agregado") {
-        const codigo = indice++;
         const producto = action.payload;
         const total = producto.cantidad * producto.precio;
         return {
@@ -12,7 +9,6 @@ const reducer = (state, action) => {
                 ...state.productos,
                 {
                     ...producto,
-                    codigo,
                     total
                 }
             ]
@@ -104,11 +100,27 @@ const agregarOModificarProductoMidleware = store => next => action => {
         return next(action);
     }
     const producto = action.payload;
-    if (producto.codigo) {
-        store.dispatch(productoModificado(producto));
-    } else {
-        store.dispatch(productoAgregado(producto));
-    }
-    return store.dispatch(productoSeleccionado(null));
+    const actionToDispatch = producto.codigo ? productoModificado(producto) : productoAgregado(producto);
 
+    store.dispatch(actionToDispatch);
+    return store.dispatch(productoSeleccionado(null));
+}
+
+const generadorCodigoProductoMiddleware  = store => next => action => {
+    if (action.type != "producto-agregado"){
+        return next(action);
+    }
+    action.payload = {...action.payload, codigo}
+}
+
+function generadorCodigoProductoBuilder(codigoInicial){
+    let codigo = codigoInicial;
+    return store => next => action => {
+        if (action.type != "producto-agregado"){
+            return next(action);
+        }
+        codigo ++;
+        action.payload = {...action.payload, codigo}
+        return next(action);
+    };
 }
