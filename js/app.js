@@ -4,7 +4,10 @@ const preloadedState = {
 };
 
 
-const middlewares = Redux.applyMiddleware(loggerMidleware);
+const middlewares = Redux.applyMiddleware(
+    loggerMidleware,
+    agregarOModificarProductoMidleware,
+);
 const store = Redux.createStore(reducer, preloadedState, middlewares);
 
 let latestState;
@@ -18,15 +21,7 @@ const subscribe = store.subscribe(() => {
     }
 });
 
-ui.onFormSubmit = (producto) => {
-    if (producto.codigo) {
-        store.dispatch(productoModificado(producto));
-    } else {
-        store.dispatch(productoAgregado(producto));
-    }
-
-    store.dispatch(productoSeleccionado(null));
-}
+ui.onFormSubmit = (producto) => store.dispatch(agregarOModificarProducto(producto));
 
 ui.onEliminarClick = (codigo) => store.dispatch(productoEliminado(codigo));
 
