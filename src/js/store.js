@@ -6,7 +6,7 @@ const ActionTypes = {
     ProductoAgregadoModificado : "producto-agregado-o-modificado",
 }
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
     
     switch (action.type){
         case ActionTypes.ProductoAgregado:
@@ -23,28 +23,28 @@ const reducer = (state, action) => {
     }
 };
 
-const productoSeleccionado = (codigo) => ({
+export const productoSeleccionado = (codigo) => ({
     type: ActionTypes.ProductoSeleccionado,
     payload: { codigo }
 });
 
 
-const productoEliminado = (codigo) => ({
+export const productoEliminado = (codigo) => ({
     type: ActionTypes.ProductoEliminado,
     payload: { codigo }
 });
 
-const productoModificado = (payload) => ({
+export const productoModificado = (payload) => ({
     type: ActionTypes.ProductoModificado,
     payload
 });
 
-const productoAgregado = (payload) => ({
+export const productoAgregado = (payload) => ({
     type: ActionTypes.ProductoAgregado,
     payload
 });
 
-const agregarOModificarProducto = (payload) => ({
+export const agregarOModificarProducto = (payload) => ({
     type: ActionTypes.ProductoAgregadoModificado,
     payload
 });
@@ -63,14 +63,14 @@ const agregarOModificarProducto = (payload) => ({
 }*/
 
 //using arrow function 
-const loggerMidleware = store => next => action => {
+export const loggerMidleware = store => next => action => {
     console.log("dispatching", action);
     const result = next(action);
     console.log("Next state", store.getState());
     return result;
 }
 
-const agregarOModificarProductoMidleware = store => next => action => {
+export const agregarOModificarProductoMidleware = store => next => action => {
     if (action.type != ActionTypes.ProductoAgregadoModificado){
         return next(action);
     }
@@ -127,7 +127,7 @@ function productoAgregadoReducer(state, action) {
     };
 }
 
-function generadorCodigoProductoBuilder(codigoInicial){
+export function generadorCodigoProductoBuilder(codigoInicial){
     let codigo = codigoInicial;
     return store => next => action => {
         if (action.type != ActionTypes.ProductoAgregado){

@@ -1,4 +1,4 @@
-const ui = {
+export const ui = {
     onEliminarClick: (codigo) => { },
     onEditarClick: (codigo) => { },
 
