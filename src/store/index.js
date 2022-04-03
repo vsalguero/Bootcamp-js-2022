@@ -1,8 +1,8 @@
 import { applyMiddleware, createStore } from "redux";
 import * as storage from "./store";
 
-const savedState = sessionStorage.getItem("state");
-const deserialized = savedState && JSON.parse(savedState)
+const savedState = localStorage.getItem("state");
+const deserialized = savedState && JSON.parse(savedState);
 
 const preloadedState = deserialized || {
     producto: {},

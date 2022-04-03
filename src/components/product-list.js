@@ -36,7 +36,7 @@ const ProductList = () => {
   const productos = useSelector((state) => state.productos);
   const dispatch = useDispatch();
 
-  const seleccionar = (item) => {
+  const seleccionar = (codigo) => {
     dispatch(productoSeleccionado(codigo));
   }
 

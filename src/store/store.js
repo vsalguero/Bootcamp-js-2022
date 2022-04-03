@@ -17,7 +17,7 @@ export const storageMiddleware = store => next => action => {
 
     if (actions.indexOf(action.type) >= 0) {
         const state = store.getState();
-        sessionStorage.setItem("state", JSON.stringify());
+        localStorage.setItem("state", JSON.stringify(state));
     }
     return result;
 
