@@ -1,14 +1,31 @@
 const ActionTypes = {
-    ProductoAgregado : "producto-agregado",
+    ProductoAgregado: "producto-agregado",
     ProductoModificado: "producto-modificado",
     ProductoEliminado: "producto-eliminado",
     ProductoSeleccionado: "producto-seleccionado",
-    ProductoAgregadoModificado : "producto-agregado-o-modificado",
+    ProductoAgregadoModificado: "producto-agregado-o-modificado",
+}
+
+export const storageMiddleware = store => next => action => {
+    const actions = [
+        ActionTypes.ProductoAgregado,
+        ActionTypes.ProductoModificado,
+        ActionTypes.ProductoEliminado
+    ];
+
+    const result = next(action);
+
+    if (actions.indexOf(action.type) >= 0) {
+        const state = store.getState();
+        sessionStorage.setItem("state", JSON.stringify());
+    }
+    return result;
+
 }
 
 export const reducer = (state, action) => {
-    
-    switch (action.type){
+
+    switch (action.type) {
         case ActionTypes.ProductoAgregado:
             return productoAgregadoReducer(state, action);
         case ActionTypes.ProductoModificado:
@@ -71,7 +88,7 @@ export const loggerMidleware = store => next => action => {
 }
 
 export const agregarOModificarProductoMidleware = store => next => action => {
-    if (action.type != ActionTypes.ProductoAgregadoModificado){
+    if (action.type != ActionTypes.ProductoAgregadoModificado) {
         return next(action);
     }
     const producto = action.payload;
@@ -127,15 +144,15 @@ function productoAgregadoReducer(state, action) {
     };
 }
 
-export function generadorCodigoProductoBuilder(codigoInicial){
+export function generadorCodigoProductoBuilder(codigoInicial) {
     let codigo = codigoInicial;
     return store => next => action => {
-        if (action.type != ActionTypes.ProductoAgregado){
+        if (action.type != ActionTypes.ProductoAgregado) {
             return next(action);
         }
-        codigo ++;
+        codigo++;
         const actionToDispatch = {
-            ...action, 
+            ...action,
             payload: {
                 ...action.payload,
                 codigo

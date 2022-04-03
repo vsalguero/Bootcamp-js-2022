@@ -1,16 +1,21 @@
 import { applyMiddleware, createStore } from "redux";
-import * as $store from "./store";
-const preloadedState = {
+import * as storage from "./store";
+
+const savedState = sessionStorage.getItem("state");
+const deserialized = savedState && JSON.parse(savedState)
+
+const preloadedState = deserialized || {
     producto: {},
     productos: []
 };
 
 
 const middlewares = applyMiddleware(
-    $store.loggerMidleware,
-    $store.agregarOModificarProductoMidleware,
-    $store.generadorCodigoProductoBuilder(0),
+    storage.loggerMidleware,
+    storage.agregarOModificarProductoMidleware,
+    storage.generadorCodigoProductoBuilder(0),
+    storage.storageMiddleware
 );
-const store = createStore($store.reducer, preloadedState, middlewares);
+const store = createStore(storage.reducer, preloadedState, middlewares);
 
 export default store;
