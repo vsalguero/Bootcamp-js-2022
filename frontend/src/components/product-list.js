@@ -16,7 +16,7 @@ const ProductItem = (prop) => {
         <a
           href="#"
           className="btn btn-small btn-outline-secondary"
-          onClick={() => acciones.seleccionar(producto)}
+          onClick={() => acciones.seleccionar(producto.codigo)}
         >
           <i className="bi bi-pencil-square"></i>
         </a>
