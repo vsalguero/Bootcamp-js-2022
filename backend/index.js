@@ -1,8 +1,11 @@
 import express from "express";
+const cors = require("cors");
 const app = express();
+//avoid compatibility problems with browsers 
+app.use(cors());
 
 let lastId = 1;
-const productos = [
+let productos = [
     {
         nombre: "producto a",
         cantidad : 2,
@@ -12,7 +15,7 @@ const productos = [
 ];
 
 app.get("/", (req, res) => {
-    res.send("<h1>Hola mundo</h1>");
+    res.send("<h1>Api de productos</h1>");
 });
 
 //Globar middleware for all request
@@ -21,7 +24,13 @@ app.use(logs);
 app.use(express.json());
 
 app.get("/productos", (req, res) => {
-    res.json(productos);
+    const filtro = req.query.filtro;
+    if(filtro){
+        res.json(productos.filter(p => p.nombre.indexOf(filtro) >= 0));
+    }else{
+        res.json(productos);
+    }
+    
 });
 
 app.post("/productos", (req, res) => {
@@ -33,6 +42,7 @@ app.post("/productos", (req, res) => {
     res.json(producto);
 });
 
+//modificar
 app.put("/productos/:codigo", (req, res) => {
     const codigo = parseInt(req.params.codigo);
     const producto = productos.find(p => p.codigo == codigo);
@@ -41,6 +51,20 @@ app.put("/productos/:codigo", (req, res) => {
         const nuevoProducto = productos[index] = { ...req.body, codigo }
         res.status(200);
         res.json(nuevoProducto);
+    } else {
+        res.status(404);
+        res.json({ message: "No existe ningun producto con ese codigo" + codigo });
+    }
+});
+
+//delete
+app.delete("/productos/:codigo", (req, res) => {
+    const codigo = parseInt(req.params.codigo);
+    const producto = productos.find(p => p.codigo == codigo);
+    if (codigo) {
+        productos = productos.filter(x => x != producto);
+        res.status(200);
+        res.json({ message: "Producto eliminado" });
     } else {
         res.status(404);
         res.json({ message: "No existe ningun producto con ese codigo" + codigo });
@@ -65,8 +89,8 @@ function logs(req, res, next) {
     next();
 }
 
+const port = process.argv[2] | process.env.PORT | 5001;
 
-
-app.listen(5000, () => {
-    console.log("Escuchando en el puerto 5000");
+app.listen(port, () => {
+    console.log(`Escuchando en el puerto ${port}`);
 });
