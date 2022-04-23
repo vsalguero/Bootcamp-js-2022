@@ -10,7 +10,8 @@ let productos = [
         nombre: "producto a",
         cantidad : 2,
         precio : 10,
-        codigo : lastId
+        codigo : lastId,
+        total: 10
     }
 ];
 
@@ -34,9 +35,9 @@ app.get("/productos", (req, res) => {
 });
 
 app.post("/productos", (req, res) => {
-    console.log("Body:", req.body);
     lastId++;
-    const producto = { ...req.body, codigo: lastId };
+    const { cantidad, precio } = req.body;
+    const producto = { ...req.body, codigo: lastId, total: cantidad * precio };
     productos.push(producto);
     res.status(201);
     res.json(producto);
@@ -47,8 +48,9 @@ app.put("/productos/:codigo", (req, res) => {
     const codigo = parseInt(req.params.codigo);
     const producto = productos.find(p => p.codigo == codigo);
     if (codigo) {
+        const { cantidad, precio } = req.body;
         const index = productos.indexOf(producto);
-        const nuevoProducto = productos[index] = { ...req.body, codigo }
+        const nuevoProducto = productos[index] = { ...req.body, codigo, total: cantidad * precio }
         res.status(200);
         res.json(nuevoProducto);
     } else {
