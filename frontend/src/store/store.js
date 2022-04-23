@@ -4,6 +4,7 @@ const ActionTypes = {
     ProductoEliminado: "producto-eliminado",
     ProductoSeleccionado: "producto-seleccionado",
     ProductoAgregadoModificado: "producto-agregado-o-modificado",
+    AsignarProductos: "asignar-productos"
 }
 
 export const storageMiddleware = store => next => action => {
@@ -34,6 +35,12 @@ export const reducer = (state, action) => {
             return productoEliminadoReducer(state, action);
         case ActionTypes.ProductoSeleccionado:
             return productoSeleccionadoReducer(state, action);
+
+        case ActionTypes.AsignarProductos:
+                return {
+                    ...state,
+                    productos: action.payload
+                };
 
         default:
             return state;

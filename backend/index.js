@@ -1,5 +1,5 @@
 import express from "express";
-const cors = require("cors");
+import cors from "cors";
 const app = express();
 //avoid compatibility problems with browsers 
 app.use(cors());
