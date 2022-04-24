@@ -2,11 +2,13 @@ import React from "react";
 import "./app.css";
 import ProductForm from "./components/product-form";
 import ProductList from "./components/product-list";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
+import { ConnectedRouter } from "connected-react-router";
+import { history } from "./store";
 
 const App = () => {
   return <main className="container">
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Switch>
         <Route path="/nuevo">
           <ProductForm />
@@ -19,7 +21,7 @@ const App = () => {
         </Route>
       </Switch>
 
-    </BrowserRouter>
+    </ConnectedRouter>
 
 
 

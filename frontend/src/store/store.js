@@ -7,20 +7,27 @@ const ActionTypes = {
     AsignarProductos: "asignar-productos"
 }
 
-export const storageMiddleware = store => next => action => {
-    const actions = [
-        ActionTypes.ProductoAgregado,
-        ActionTypes.ProductoModificado,
-        ActionTypes.ProductoEliminado
-    ];
+export const producto = (state = {}, action) => {
 
-    const result = next(action);
+    switch (action.type) {
+        case ActionTypes.ProductoSeleccionado:
+            return action.payload;
 
-    if (actions.indexOf(action.type) >= 0) {
-        const state = store.getState();
-        localStorage.setItem("state", JSON.stringify(state));
+        default:
+            return state;
     }
-    return result;
+
+}
+
+export const productos = (state = [], action) => {
+
+    switch (action.type) {
+        case ActionTypes.AsignarProductos:
+            return action.payload;
+
+        default:
+            return state;
+    }
 
 }
 
@@ -34,10 +41,10 @@ export const reducer = (state, action) => {
             }
 
         case ActionTypes.AsignarProductos:
-                return {
-                    ...state,
-                    productos: action.payload
-                };
+            return {
+                ...state,
+                productos: action.payload
+            };
 
         default:
             return state;
@@ -70,7 +77,22 @@ export const agregarOModificarProducto = (payload) => ({
     payload
 });
 
+export const storageMiddleware = store => next => action => {
+    const actions = [
+        ActionTypes.ProductoAgregado,
+        ActionTypes.ProductoModificado,
+        ActionTypes.ProductoEliminado
+    ];
 
+    const result = next(action);
+
+    if (actions.indexOf(action.type) >= 0) {
+        const state = store.getState();
+        localStorage.setItem("state", JSON.stringify(state));
+    }
+    return result;
+
+}
 
 /*function loggerMidleware(store) {
     return function dispatchWrapper(next) {
