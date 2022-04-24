@@ -1,9 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import mongoose from "mongoose";
 import productos from "./productos";
 
-mongoose.connect("mongodb+srv://vsalguero:74gIL7iXlsogZojV@cluster0.4yq0r.mongodb.net/BootcampDB?retryWrites=true&w=majority", () =>{
+mongoose.connect(process.env.DB_URI, () =>{
     console.log("Conectado a la base de datos");
 });
 
-export default { productos };
+export default {productos};
 
