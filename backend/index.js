@@ -1,19 +1,10 @@
 import express from "express";
 import cors from "cors";
+import { productos } from "./database/index";
+
 const app = express();
 //avoid compatibility problems with browsers 
 app.use(cors());
-
-let lastId = 1;
-let productos = [
-    {
-        nombre: "producto a",
-        cantidad : 2,
-        precio : 10,
-        codigo : lastId,
-        total: 10
-    }
-];
 
 app.get("/", (req, res) => {
     res.send("<h1>Api de productos</h1>");
@@ -24,22 +15,24 @@ app.use(logs);
 //app.use(bodyParser.json({type: 'application/json'}));
 app.use(express.json());
 
-app.get("/productos", (req, res) => {
+app.get("/productos", async (req, res) => {
     const filtro = req.query.filtro;
-    if(filtro){
-        res.json(productos.filter(p => p.nombre.indexOf(filtro) >= 0));
-    }else{
-        res.json(productos);
+    let result;
+    if (filtro) {
+        result = await productos.filter(filtro);
+    } else {
+        result = await productos.all();
     }
-    
+    res.json(result);
+
 });
 
-app.get("/productos/:codigo", (req, res) => {
-    const codigo = parseInt(req.params.codigo);
-    const producto = productos.find(p => p.codigo == codigo);
-    
+app.get("/productos/:codigo", async (req, res) => {
+    const codigo = req.params.codigo;
+    const producto = await productos.single(codigo);
+
     if (codigo) {
-        
+
         res.status(200);
         res.json(producto);
     } else {
@@ -49,42 +42,36 @@ app.get("/productos/:codigo", (req, res) => {
 });
 
 
-app.post("/productos", (req, res) => {
-    lastId++;
-    const { cantidad, precio } = req.body;
-    const producto = { ...req.body, codigo: lastId, total: cantidad * precio };
-    productos.push(producto);
+app.post("/productos", async (req, res) => {
+    const producto = await productos.add(req.body);
     res.status(201);
     res.json(producto);
 });
 
 //modificar
-app.put("/productos/:codigo", (req, res) => {
-    const codigo = parseInt(req.params.codigo);
-    const producto = productos.find(p => p.codigo == codigo);
-    if (codigo) {
-        const { cantidad, precio } = req.body;
-        const index = productos.indexOf(producto);
-        const nuevoProducto = productos[index] = { ...req.body, codigo, total: cantidad * precio }
+app.put("/productos/:codigo", async (req, res) => {
+    const codigo = req.params.codigo;
+    try {
+        const nuevoProducto = await productos.update(codigo, req.body);
         res.status(200);
         res.json(nuevoProducto);
-    } else {
+    } catch (error) {
         res.status(404);
-        res.json({ message: "No existe ningun producto con ese codigo" + codigo });
+        res.json({ error });
     }
 });
 
 //delete
-app.delete("/productos/:codigo", (req, res) => {
-    const codigo = parseInt(req.params.codigo);
-    const producto = productos.find(p => p.codigo == codigo);
-    if (codigo) {
-        productos = productos.filter(x => x != producto);
+app.delete("/productos/:codigo", async (req, res) => {
+    const codigo = req.params.codigo;
+
+    try {
+        await productos.remove(codigo);
         res.status(200);
         res.json({ message: "Producto eliminado" });
-    } else {
+    } catch (message) {
         res.status(404);
-        res.json({ message: "No existe ningun producto con ese codigo" + codigo });
+        res.json({ message });
     }
 });
 

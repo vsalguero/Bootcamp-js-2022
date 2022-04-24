@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 
 const ProductosScheme = new mongoose.Schema(
   {
@@ -31,20 +32,31 @@ const ProductosScheme = new mongoose.Schema(
 
 const Productos = mongoose.model("productos", ProductosScheme);
 
-module.exports = { Productos };
 
 //methods
-const all = () => Productos.find({});
+const all = () => Productos.find({}).then(mapProductos);
 
-const filter = ()=> Productos.find({ nombre: {$regex: filtro, $options: "i"} });
-const add = () => {
+const filter = ()=> Productos.find({ nombre: {$regex: filtro, $options: "i"} }).then(mapProductos);
+const add = (producto) => {
     const nuevoProducto = new Productos({...producto, total: producto.cantidad * producto.precio });
-    return nuevoProducto.save();
+    return nuevoProducto.save().then(mapProducto);
 };
 
 const single = (_id) => Productos.findOne({_id});
-const update = (_id, producto) => Productos.findOneAndUpdate({_id}, producto, {new: true});
-const remove = (_id) => Productos.findOneAndRemove({_id});
+const update = (_id, producto) => Productos.findOneAndUpdate({_id}, producto, {new: true}).then(mapProducto);;
+const remove = (_id) => Productos.findOneAndRemove({_id}).then(mapProducto);;
+
+function mapProductos(productos){
+  return productos.map(p => ({...p.toJSON(), codigo: _id}));
+}
+
+function mapProducto(producto){
+  if(producto){
+    return {...producto.toJSON(), codigo: producto._id};
+  }
+  return null;
+}
+
 
 export default {
     all, 
