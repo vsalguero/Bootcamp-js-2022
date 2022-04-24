@@ -18,18 +18,26 @@ const apiMiddleware = (store) => (next) => async (action) => {
             //next({type: "producto-agregado", payload: producto});
             break;
         case "producto-modificado":
-                const productomodificado = await api.update(action.payload);
-                const productosmodificados = await api.all();
-                store.dispatch(asignarProductos(productosmodificados));
-                //next({type: "producto-agregado", payload: producto});
-                break;
+            const productomodificado = await api.update(action.payload);
+            const productosmodificados = await api.all();
+            store.dispatch(asignarProductos(productosmodificados));
+            //next({type: "producto-agregado", payload: producto});
+            break;
+        case "producto-seleccionado":
+            const {codigo} = action.payload;
+            if(codigo ){
+                const productoSeleccionado = await api.single(action.payload.codigo);
+                next({ type: action.type, payload: productoSeleccionado })
+            }else{
+                next({ type: action.type, payload: {} });
+            }           
+            break;
         case "producto-eliminado":
-                    const productoeliminado = await api.remove(action.payload.codigo);
-                    const nuevoListado = await api.all();
-                    store.dispatch(asignarProductos(nuevoListado));
-                    //next({type: "producto-agregado", payload: producto});
-                    break;
-                
+            const productoEliminado = await api.remove(action.payload.codigo);
+            const nuevoListado = await api.all();
+            store.dispatch(asignarProductos(nuevoListado));
+            //next({type: "producto-agregado", payload: producto});
+            break;
         default:
             next(action);
             break;

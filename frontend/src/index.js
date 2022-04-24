@@ -12,5 +12,3 @@ ReactDom.render(
         <App />
     </Provider>,
     container);
-
-store.dispatch({ type: "obtener-productos"});

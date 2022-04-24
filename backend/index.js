@@ -34,6 +34,21 @@ app.get("/productos", (req, res) => {
     
 });
 
+app.get("/productos/:codigo", (req, res) => {
+    const codigo = parseInt(req.params.codigo);
+    const producto = productos.find(p => p.codigo == codigo);
+    
+    if (codigo) {
+        
+        res.status(200);
+        res.json(producto);
+    } else {
+        res.status(404);
+        res.json({ message: "No existe ningun producto con ese codigo" + codigo });
+    }
+});
+
+
 app.post("/productos", (req, res) => {
     lastId++;
     const { cantidad, precio } = req.body;
