@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { productos } from "./database/index";
+import { productos, dbConnect } from "./database/index";
 
 const app = express();
 //avoid compatibility problems with browsers 
@@ -9,6 +9,8 @@ app.use(cors());
 app.get("/", (req, res) => {
     res.send("<h1>Api de productos</h1>");
 });
+
+dbConnect();
 
 //Globar middleware for all request
 app.use(logs);

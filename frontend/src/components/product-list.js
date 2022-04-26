@@ -17,12 +17,20 @@ const ProductItem = (prop) => {
       <div className="btn-group">
         <Link 
         title="Editar" 
+        
         to={"editar/" + producto.codigo}
         className="btn btn-sm btn-outline-secondary"       
         >
           <i className="bi bi-pencil-square"></i>
 
         </Link>
+        {/*<a
+          href="#"
+          className="btn btn-small btn-outline-secondary"
+          onClick={() => acciones.seleccionar(producto.codigo)}
+        >
+          <i className='bi bi-pencil-square'></i>
+</a>*/}
         <a
           href="#"
           className="btn btn-small btn-outline-danger"

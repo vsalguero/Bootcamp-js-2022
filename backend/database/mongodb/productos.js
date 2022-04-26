@@ -45,7 +45,7 @@ const update = (_id, producto) => Productos.findOneAndUpdate({ _id }, producto, 
 const remove = (_id) => Productos.findOneAndRemove({ _id }).then(mapProducto);;
 
 function mapProductos(productos) {
-  return productos.map(p => ({ ...p.toJSON(), codigo: _id }));
+  return productos.map(p => ({ ...p.toJSON(), codigo: p._id }));
 }
 
 function mapProducto(producto) {

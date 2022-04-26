@@ -30,13 +30,13 @@ const ProductForm = () => {
       cantidad: producto.cantidad || '',
       precio: producto.precio || '',
       categoria: producto.categoria || 1
-    })
-    
+    });
+
     if(codigo != producto.codigo){
       dispatch(productoSeleccionado(codigo));
     }
 
-  }, [producto]);
+  }, [producto.codigo]);
 
   const onChange = (event) => {
     const target = event.target;
