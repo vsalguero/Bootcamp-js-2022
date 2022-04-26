@@ -12,6 +12,7 @@ Ejercicios y ejemplos desarrollados durante el Bootcamp de JavaScript, NodeJS y 
 Project is created with:
 * MongoDB
 * React
+* Redux
 * Node.js (express)
 	
 ## Setup
